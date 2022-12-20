@@ -17,21 +17,23 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class FirebaseCloudMessageService {
+
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/fcm-test-7c985/messages:send";
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
         String message = makeMessage(targetToken, title, body);
 
         OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
-
+        RequestBody requestBody = RequestBody.create(message,
+                MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder()
                 .url(API_URL)
                 .post(requestBody)
                 .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                 .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
                 .build();
+
         Response response = client.newCall(request).execute();
 
         System.out.println(response.body().string());
@@ -47,8 +49,10 @@ public class FirebaseCloudMessageService {
                                 .image(null)
                                 .build()
                         ).build()).validateOnly(false).build();
+
         return objectMapper.writeValueAsString(fcmMessage);
     }
+
     private String getAccessToken() throws IOException {
         String firebaseConfigPath = "firebase/firebase_service_key.json";
 
@@ -59,5 +63,4 @@ public class FirebaseCloudMessageService {
         googleCredentials.refreshIfExpired();
         return googleCredentials.getAccessToken().getTokenValue();
     }
-
 }

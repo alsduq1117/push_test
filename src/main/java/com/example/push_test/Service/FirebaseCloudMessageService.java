@@ -19,7 +19,7 @@ import java.util.List;
 public class FirebaseCloudMessageService {
 
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/fcm-test-7c985/messages:send";
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;    //
 
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
         String message = makeMessage(targetToken, title, body);
@@ -58,9 +58,10 @@ public class FirebaseCloudMessageService {
 
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));           //엑세스 토큰 받아오기
 
         googleCredentials.refreshIfExpired();
+        System.out.println(googleCredentials.getAccessToken().getTokenValue());
         return googleCredentials.getAccessToken().getTokenValue();
     }
 }

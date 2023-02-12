@@ -38,7 +38,7 @@ public class MainController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/api/fcm_topic")
+    @PostMapping("/api/fcm/topic")
     public ResponseEntity pushMessages(@RequestBody RequestDTO requestDTO) throws IOException {
         System.out.println(requestDTO.getTargetToken() + " "
                 +requestDTO.getTitle() + " " + requestDTO.getBody());
